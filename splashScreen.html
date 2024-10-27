@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CBIT HACKOTBER FEST VIDEO SUMMARIZER</title>
+    <script src="https://cdn.jsdelivr.net/npm/@lottiefiles/lottie-player"></script>
+    
+    <style>
+        @font-face {
+            font-family: 'Lexend';
+            src: url('/static/Lexend-Regular.ttf'); /* Ensure you have the correct path for the Lexend font */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #11f611; /* Set background color to #11f611 */
+        }
+        
+        #container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%; /* Ensure the container takes full width */
+        }
+
+        #gifContainer {
+            width: 150px; /* Fixed width for the GIF container */
+            margin-right: 30px; /* Adjust the margin as needed */
+        }
+
+        #textContainer {
+            font-size: 16px; /* Adjust font size of the text */
+            max-width: calc(100% - 170px); /* Maximum width for text container (100% - gif container width - margin) */
+            font-family: 'Lexend', sans-serif; /* Change to Lexend */
+        }
+
+        #loader {
+            width: 100%; /* Use 100% width for the GIF */
+            max-width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="gifContainer">
+            <lottie-player id="loader" src="{{ url_for('static', filename='loading.json') }}" autoplay loop></lottie-player>
+        </div>
+        <div id="textContainer">
+            <h2>Data loading</h2>
+        </div>
+    </div>
+
+    <script>
+        var videoUrl = "{{ videoUrl }}"; // Ensure videoUrl is passed from the previous page
+        window.addEventListener("load", function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/process_video?videoUrl=" + encodeURIComponent(videoUrl), true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    window.location.href = "/summarize"; // Adjust redirect as needed
+                }
+            };
+            xhr.send("value=" + encodeURIComponent(window.location.search.substring(1)));
+        });
+    </script>
+    
+    <script>
+        // Array of text messages
+        var textArray = [
+            "<p>Initiating YouTube video transcription retrieval, please hold on for a moment..</h2>",
+            "<p>Employing RAG for extracting relevant information, your patience is appreciated...</p>",
+        ];
+
+        // Function to display text with time interval
+        function displayTextWithInterval() {
+            var textContainer = document.getElementById("textContainer");
+            var index = 0;
+
+            // Display first text immediately
+            textContainer.innerHTML = textArray[index];
+
+            // Set interval to display subsequent texts
+            var intervalId = setInterval(function() {
+                index++;
+                if (index < textArray.length) {
+                    textContainer.innerHTML = textArray[index];
+                } else {
+                    clearInterval(intervalId); // Stop interval when all texts are displayed
+                }
+            }, 4000); // Change 4000 to the desired time interval in milliseconds (e.g., 4000 for 4 seconds)
+        }
+
+        // Call the function to start displaying texts
+        displayTextWithInterval();
+    </script>
+</body>
+</html>
