@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <title>HACKOTBER FEST VIDEO SUMMARIZER</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}" />
+</head>
+
+<body>
+  <nav>
+    <div class="logo">
+      <a href="/">
+        <img src="{{ url_for('static', filename='main_logo.png') }}" alt="My Logo">
+      </a>
+    </div>
+    <ul class="menu">
+      <!-- Add menu items here if needed -->
+    </ul>
+  </nav>
+
+  <div class="svg-animation">
+    <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="144" viewBox="0 0 1440 144" fill="none">
+      <path fill-rule="evenodd" clip-rule="evenodd"
+        d="M214 1.87085e-05V80H285V109H419V80L627 80V19.5091L763.086 19.5091V80H889.801V55.3599L1003.94 55.3599V110.233L1073.44 110.233V29.7522L1256 29.7522V3.44969e-06L1440 1.87085e-05V144H0V0L214 1.87085e-05ZM627 144V80.2358L763 80.2358V144L627 144Z"
+        fill="#183717">
+      </path>
+      <path d="M419 80L285 80V50L419 50V80Z" fill="#183717"></path>
+    </svg>
+  </div>
+
+  <div class="body-content">
+    <div class="content-wrapper">
+      <div class="paragraph-wrapper">
+        <p>Video summarizer allows you to summarize your whole video and gives you a summary of your video in just a few seconds.</p>
+      </div>
+      <div class="form-wrapper">
+        <form id="videoUrlForm" action="/splashScreen" method="post">
+          <input type="text" id="video-url-input" name="videoUrl" placeholder="Please paste YouTube video link here (up to 10 minutes max)">
+          <label for="video-upload">Or upload your video file:</label>
+          <input type="file" id="video-upload" name="videoFile" accept="video/*">
+          <button type="submit" id="myButton">Summarize Now</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Splash Screen -->
+  <div id="splash-screen" style="display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #183717; z-index: 9999;">
+    <h1 style="color: white;">Loading...</h1>
+  </div>
+
+  <script>
+    // Wait for the DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', function () {
+      // Attach event listener for form submission
+      document.getElementById('videoUrlForm').addEventListener('submit', function (event) {
+        event.preventDefault(); // Always prevent the default form submission initially
+
+        // Show splash screen
+        document.getElementById('splash-screen').style.display = 'flex'; // Show splash screen
+
+        // Submit the form programmatically after showing the splash screen
+        setTimeout(() => {
+          document.getElementById('videoUrlForm').submit();
+        }, 2000); // Adjust the delay as needed
+      });
+    });
+  </script>
+</body>
+
+</html>
